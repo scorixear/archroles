@@ -2,10 +2,7 @@ import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
 import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
-import SqlHandler from "../handlers/sqlHandler";
 import messageHandler from "../handlers/messageHandler";
-
-declare const sqlHandler: SqlHandler;
 
 export default class Unregister extends CommandInteractionHandle {
   constructor() {

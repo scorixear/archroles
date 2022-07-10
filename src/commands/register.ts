@@ -3,9 +3,6 @@ import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
 import {CommandInteraction,  GuildMember} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
-import SqlHandler from "../handlers/sqlHandler";
-
-declare const sqlHandler: SqlHandler;
 
 export default class Register extends CommandInteractionHandle {
   constructor() {
@@ -61,7 +58,7 @@ export default class Register extends CommandInteractionHandle {
         interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
       }
     } catch(error) {
-      interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
+      interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
     }
   }
 }

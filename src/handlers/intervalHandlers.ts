@@ -1,9 +1,7 @@
 import { Guild, GuildMember } from "discord.js";
 import config from '../config';
 import DiscordHandler from "./discordHandler";
-import SqlHandler from "./sqlHandler";
 
-declare const sqlHandler: SqlHandler;
 declare const discordHandler: DiscordHandler;
 
 export class IntervalHandlers {
@@ -19,7 +17,7 @@ export class IntervalHandlers {
 
   private static async handleUnregister() {
     if (!this.archGuild || !this.archKGuild) return;
-    let removedMembers = [];
+    const removedMembers = [];
     for (const pair of await (this.archKGuild.members.fetch())) {
       const member = pair[1];
       if (!member.roles.cache.has(config.bypassRole)) {
@@ -30,8 +28,12 @@ export class IntervalHandlers {
           try {
             archMember = await this.archGuild.members.fetch(member.user.id);
           } catch {
-            this.removeRoles(member);
-            removedMembers.push(member);
+            if(member.roles.cache.size > 0) {
+              try {
+                await this.removeRoles(member);
+                removedMembers.push(member);
+              } catch {}
+            }
             continue;
           }
         }
@@ -44,8 +46,12 @@ export class IntervalHandlers {
           }
         }
         if (!isValid) {
-          this.removeRoles(member)
-          removedMembers.push(member);
+          if(member.roles.cache.size > 0) {
+            try {
+              await this.removeRoles(member);
+              removedMembers.push(member);
+            } catch {}
+          }
           continue;
         }
       }

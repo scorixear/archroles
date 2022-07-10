@@ -3,11 +3,15 @@ import { CommandInteractionHandle } from '../model/CommandInteractionHandle';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import config from '../config';
+import Register from '../commands/register';
+import Unregister from '../commands/unregister';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
   constructor() {
     this.commandInteractions = [
+      new Register(),
+      new Unregister()
     ];
   }
 
