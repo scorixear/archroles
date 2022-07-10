@@ -20,6 +20,7 @@ export class IntervalHandlers {
     const removedMembers = [];
     for (const pair of await (this.archKGuild.members.fetch())) {
       const member = pair[1];
+      if (member.user.bot) continue;
       if (!member.roles.cache.has(config.bypassRole)) {
         let archMember: GuildMember | undefined;
         if (this.archGuild.members.cache.has(member.user.id)) {
