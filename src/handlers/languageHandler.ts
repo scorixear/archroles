@@ -18,6 +18,43 @@ export default class LanguageHandler {
           title: "Successfully Unregistered",
           description: "You have been successfully unregistered from the ARCH Korea discord.",
         }
+      },
+      addGuild: {
+        description: "Adds a guild to the database",
+        error: {
+          already_entered: "This guild is already entered in the database.",
+          internalError: "An internal error occured. Please try again later.",
+        },
+        success: {
+          title: "Successfully Linked",
+          description: "Successfully linked §0 with <@$1>.",
+        },
+        options: {
+          arch_discord_role: "The ARCH discord role name",
+          discord_role: "The ARCH Korea discord role",
+        }
+      },
+      removeGuild: {
+        description: "Removes a guild from the database",
+        error: {
+          internalError: "An internal error occured. Please try again later.",
+        },
+        success: {
+          title: "Successfully Unlinked",
+          description: "Successfully unlinked <@$0>.",
+        },
+        options: {
+          discord_role: "The ARCH Korea discord role",
+        }
+      },
+      showGuild: {
+        description: "Shows all guilds in the database",
+        error: {
+          internalError: "An internal error occured. Please try again later.",
+        },
+        success: {
+          title: "ARCH Guilds <> ARCH Korea Guilds",
+        }
       }
     },
     handlers: {

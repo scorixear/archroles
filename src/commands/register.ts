@@ -43,6 +43,13 @@ export default class Register extends CommandInteractionHandle {
         for(const role of config.archKRoles) {
           (interaction.member as GuildMember)?.roles.add(role, "User Registered via Bot");
         }
+
+        const guildRoles = await sqlHandler.GetGuildRoles();
+        for(const guildRole of guildRoles) {
+          if (archUser.roles.cache.find(r=>r.name === guildRole.archName)) {
+            (interaction.member as GuildMember)?.roles.add(guildRole.koreaId, "User Registered via Bot");
+          }
+        }
         if(archUser.nickname) {
           (interaction.member as GuildMember)?.setNickname(archUser.nickname);
         }
