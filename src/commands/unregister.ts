@@ -1,9 +1,7 @@
 import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
-import { SlashCommandBooleanOption, SlashCommandIntegerOption } from "@discordjs/builders";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
 import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
-import MessageHandler from "../handlers/messageHandler";
 import SqlHandler from "../handlers/sqlHandler";
 import messageHandler from "../handlers/messageHandler";
 
