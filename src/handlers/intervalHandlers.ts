@@ -8,8 +8,8 @@ export class IntervalHandlers {
   private static archGuild?: Guild;
   private static archKGuild?: Guild;
   public static async initInterval() {
-    this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
-    this.archKGuild = await discordHandler.fetchGuild(config.archKDiscordId)
+    //this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
+    //this.archKGuild = await discordHandler.fetchGuild(config.archKDiscordId)
     setInterval(async () => {
       // await this.handleUnregister();
     }, 1000 * 60);
