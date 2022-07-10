@@ -1,9 +1,8 @@
 import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
-import { SlashCommandBooleanOption, SlashCommandIntegerOption } from "@discordjs/builders";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
-import MessageHandler from "../handlers/messageHandler";
+import {CommandInteraction,  GuildMember} from "discord.js";
+import messageHandler from "../handlers/messageHandler";
 import SqlHandler from "../handlers/sqlHandler";
 
 declare const sqlHandler: SqlHandler;
@@ -28,13 +27,6 @@ export default class Register extends CommandInteractionHandle {
     } catch(err) {
       return;
     }
-
-    if (await sqlHandler.isRegistered(interaction.user.id)) {
-      // error message, user already registered
-      return;
-    }
-
-    // check arch roles
     const archGuild = await discordHandler.fetchGuild(config.archDiscordId);
     try {
       const archUser = await discordHandler.fetchMember(interaction.user.id, archGuild);
@@ -47,25 +39,29 @@ export default class Register extends CommandInteractionHandle {
         }
       }
       if(!isValid) {
-        // error message, user not registered on discord
+        interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
         return;
       }
-      if (await sqlHandler.register(interaction.user.id)) {
-        try {
-          for(const role of config.archKRoles) {
-            (interaction.member as GuildMember)?.roles.add(role, "User Registered via Bot");
-          }
-          // success message
-        } catch (err) {
-          console.log(err);
-          await sqlHandler.unregister(interaction.user.id);
-          //error message, internal error
+      try {
+        for(const role of config.archKRoles) {
+          (interaction.member as GuildMember)?.roles.add(role, "User Registered via Bot");
         }
-      } else {
-        // error message, internal error
+        if(archUser.nickname) {
+          (interaction.member as GuildMember)?.setNickname(archUser.nickname);
+        }
+        interaction.reply(await messageHandler.getRichTextExplicitDefault({
+          guild: interaction.guild??undefined,
+          author: interaction.user,
+          title: LanguageHandler.language.commands.register.success.title,
+          description: LanguageHandler.language.commands.register.success.description,
+          color: 0x00ff00,
+        }));
+      } catch (err) {
+        console.log(err);
+        interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
       }
     } catch(error) {
-      // error message, user not on arch discord
+      interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
     }
   }
 }

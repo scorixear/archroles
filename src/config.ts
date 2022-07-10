@@ -5,7 +5,7 @@ export default {
   botPrefix: "/",
   version: version,
   archDiscordId: "",
-  achKDiscordId: "",
+  archKDiscordId: "",
   archRequiredRoles: [["", ""]],
   archKRoles: [""],
   bypassRole: ""

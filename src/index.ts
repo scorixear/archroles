@@ -2,6 +2,7 @@ import DiscordHandler from './handlers/discordHandler';
 import InteractionHandler from './handlers/interactionHandler';
 import SqlHandler from './handlers/sqlHandler';
 import dotenv from 'dotenv';
+import { IntervalHandlers } from './handlers/intervalHandlers';
 // initialize configuration
 dotenv.config();
 
@@ -31,4 +32,6 @@ sqlHandler.initDB().then(async () => {
   await discordHandler.login(process.env.DISCORD_TOKEN??"");
   await interactionHandler.Init();
   console.log('Arch Attendance Bot live!')
+
+  IntervalHandlers.initInterval();
 });

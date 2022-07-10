@@ -2,7 +2,22 @@ export default class LanguageHandler {
   public static language = {
     commands: {
       register: {
-        description: "Registers you to the discord"
+        description: "Registers you to the discord",
+        error: {
+          internalError: "An internal error occured. Please try again later.",
+          notRegistered: "You are not registered on the ARCH discord.",
+        },
+        success: {
+          title: "Successfully Registered",
+          description: "You have been successfully registered to the ARCH Korea discord.",
+        }
+      },
+      unregister: {
+        description: "Unregisters you from the discord",
+        success: {
+          title: "Successfully Unregistered",
+          description: "You have been successfully unregistered from the ARCH Korea discord.",
+        }
       }
     },
     handlers: {
