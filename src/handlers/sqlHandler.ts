@@ -73,7 +73,7 @@ export default class SqlHandler {
     try {
       conn = await this.pool.getConnection();
       const result = await conn.query('SELECT * FROM `guildroles`');
-      let returnValue: {archName: string, koreaId: string}[] = [];
+      const returnValue: {archName: string, koreaId: string}[] = [];
       if(result) {
         for(const row of result) {
           returnValue.push({archName: row.archName, koreaId: row.koreaId});

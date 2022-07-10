@@ -27,7 +27,7 @@ export default class LanguageHandler {
         },
         success: {
           title: "Successfully Linked",
-          description: "Successfully linked §0 with <@$1>.",
+          description: "Successfully linked $0 with <@&$1>.",
         },
         options: {
           arch_discord_role: "The ARCH discord role name",
@@ -41,7 +41,7 @@ export default class LanguageHandler {
         },
         success: {
           title: "Successfully Unlinked",
-          description: "Successfully unlinked <@$0>.",
+          description: "Successfully unlinked <@&$0>.",
         },
         options: {
           discord_role: "The ARCH Korea discord role",

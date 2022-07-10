@@ -5,13 +5,19 @@ import { Routes } from 'discord-api-types/v9';
 import config from '../config';
 import Register from '../commands/register';
 import Unregister from '../commands/unregister';
+import AddGuild from '../commands/addGuild';
+import RemoveGuild from '../commands/removeGuild';
+import ShowGuild from '../commands/showGuilds';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
   constructor() {
     this.commandInteractions = [
       new Register(),
-      new Unregister()
+      new Unregister(),
+      new AddGuild(),
+      new RemoveGuild(),
+      new ShowGuild(),
     ];
   }
 

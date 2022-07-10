@@ -26,7 +26,7 @@ export default class ShowGuild extends CommandInteractionHandle {
     }
     try {
       const guilds = await sqlHandler.GetGuildRoles();
-      const guildsText = guilds.map(g=>`${g.archName} <> <@${g.koreaId}>`).join("\n");
+      const guildsText = guilds.map(g=>`${g.archName} <> <@&${g.koreaId}>`).join("\n");
       interaction.reply(await messageHandler.getRichTextExplicitDefault({
         guild: interaction.guild??undefined,
         author: interaction.user,
