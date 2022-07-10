@@ -1,4 +1,5 @@
 src/assets/key.json
+src/config.ts
 
 # Logs
 logs
