@@ -31,6 +31,6 @@ process.on('unhandledRejection', (reason) => {
 sqlHandler.initDB().then(async () => {
   await discordHandler.login(process.env.DISCORD_TOKEN??"");
   await interactionHandler.Init();
-  console.log('Arch Attendance Bot live!')
+  console.log('Bot live!')
   IntervalHandlers.initInterval();
 });
