@@ -1,9 +1,10 @@
 import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
+import {CommandInteraction} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import { SlashCommandRoleOption } from "@discordjs/builders";
+import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
 export default class RemoveGuild extends CommandInteractionHandle {
   constructor() {
@@ -37,8 +38,10 @@ export default class RemoveGuild extends CommandInteractionHandle {
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.removeGuild.success.description, [discordRole.id]),
         color: 0x00ff00,
       }));
+      Logger.Log(`${interaction.user.tag} removed guild ${discordRole.id}`, WARNINGLEVEL.INFO);
     } catch(err) {
       interaction.reply({content: LanguageHandler.language.commands.removeGuild.error.internalError, ephemeral: true});
+      Logger.Error(`${interaction.user.tag} tried to remove guild ${discordRole.id} but it failed`, err, WARNINGLEVEL.WARN);
     }
   }
 }

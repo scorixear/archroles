@@ -1,4 +1,5 @@
 import mariadb from 'mariadb';
+import { Logger, WARNINGLEVEL } from '../helpers/logger';
 import config from '../config';
 
 export default class SqlHandler {
@@ -22,13 +23,13 @@ export default class SqlHandler {
     let conn;
     try {
       conn = await this.pool.getConnection();
-      console.log('DB Connection established');
       await conn.query('CREATE TABLE IF NOT EXISTS `guildroles` (`archName` VARCHAR(255) NOT NULL, `koreaId` VARCHAR(255) NOT NULL, PRIMARY KEY (`archName`, `koreaId`))');
     } catch (error) {
       throw error;
     } finally {
       if (conn) await conn.end();
     }
+    Logger.Log("Initialized Database", WARNINGLEVEL.INFO);
   }
 
   public async addGuildRole(archName: string, koreaId: string) {

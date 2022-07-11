@@ -1,4 +1,5 @@
 import { Guild, GuildMember } from "discord.js";
+import { Logger, WARNINGLEVEL } from "../helpers/logger";
 import config from '../config';
 import DiscordHandler from "./discordHandler";
 
@@ -57,7 +58,7 @@ export class IntervalHandlers {
         }
       }
     }
-    console.log(`Removed ${removedMembers.length} members automatically`);
+    Logger.Log(`${removedMembers.length} members were removed from discord.`, WARNINGLEVEL.INFO);
   }
 
   private static async removeRoles(member: GuildMember) {

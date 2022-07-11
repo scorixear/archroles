@@ -3,6 +3,7 @@ import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
 import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
+import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
 export default class ShowGuild extends CommandInteractionHandle {
   constructor() {
@@ -34,8 +35,10 @@ export default class ShowGuild extends CommandInteractionHandle {
         description: guildsText,
         color: 0x00ff00,
       }));
+      Logger.Log(`${interaction.user.tag} showed guilds`, WARNINGLEVEL.INFO);
     } catch(err) {
       interaction.reply({content: LanguageHandler.language.commands.showGuild.error.internalError, ephemeral: true});
+      Logger.Error(`${interaction.user.tag} tried to show guilds but it failed`, err, WARNINGLEVEL.WARN);
     }
   }
 }

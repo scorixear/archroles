@@ -8,6 +8,7 @@ import Unregister from '../commands/unregister';
 import AddGuild from '../commands/addGuild';
 import RemoveGuild from '../commands/removeGuild';
 import ShowGuild from '../commands/showGuilds';
+import { Logger, WARNINGLEVEL } from '../helpers/logger';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
@@ -33,7 +34,7 @@ export default class InteractionHandler {
     global.discordHandler.getGuilds().forEach(async guild=> {
       if(guild.id === config.archKDiscordId) {
         await rest.put(Routes.applicationGuildCommands(process.env.CLIENTID??"", guild.id), {body: commands})
-        console.log('Successfully registered application commands for guild', guild.id);
+        Logger.Log('Successfully registered application commands for guild', WARNINGLEVEL.INFO, guild.id);
       }
     });
   }
@@ -50,7 +51,7 @@ export default class InteractionHandler {
         return;
       }
     } catch (err) {
-      console.error('Error handling Interaction', err);
+      Logger.Error(`Error handling interaction ${interaction.id}`, err, WARNINGLEVEL.ERROR);
     }
 
   }

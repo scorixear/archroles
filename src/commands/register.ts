@@ -3,6 +3,7 @@ import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
 import {CommandInteraction,  GuildMember} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
+import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
 export default class Register extends CommandInteractionHandle {
   constructor() {
@@ -37,6 +38,7 @@ export default class Register extends CommandInteractionHandle {
       }
       if(!isValid) {
         interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
+        Logger.Log(`${interaction.user.username} tried to register but was not registered.`, WARNINGLEVEL.INFO);
         return;
       }
       try {
@@ -53,7 +55,9 @@ export default class Register extends CommandInteractionHandle {
         if(archUser.nickname) {
           try {
             await (interaction.member as GuildMember)?.setNickname(archUser.nickname);
-          } catch(err) {}
+          } catch(err) {
+            Logger.Error(`${interaction.user.username} tried to set nickname but it failed`, err, WARNINGLEVEL.WARN);
+          }
         }
         interaction.reply(await messageHandler.getRichTextExplicitDefault({
           guild: interaction.guild??undefined,
@@ -62,12 +66,15 @@ export default class Register extends CommandInteractionHandle {
           description: LanguageHandler.language.commands.register.success.description,
           color: 0x00ff00,
         }));
+        Logger.Log(`${interaction.user.username} registered.`, WARNINGLEVEL.INFO);
       } catch (err) {
         console.log(err);
         interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
+        Logger.Error(`${interaction.user.username} registered but failed to add roles.`, err, WARNINGLEVEL.WARN);
       }
     } catch(error) {
       interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
+      Logger.Log(`${interaction.user.username} tried to register but was not registered.`, WARNINGLEVEL.INFO);
     }
   }
 }

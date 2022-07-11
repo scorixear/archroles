@@ -5,6 +5,7 @@ import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import { SlashCommandRoleOption, SlashCommandStringOption } from "@discordjs/builders";
 import SqlHandler from "../handlers/sqlHandler";
+import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
 declare const sqlHandler: SqlHandler
 
@@ -36,6 +37,7 @@ export default class AddGuild extends CommandInteractionHandle {
 
     if(await sqlHandler.isGuildRoleEntered(archDiscordRole, discordRole.id)) {
       interaction.reply({content: LanguageHandler.language.commands.addGuild.error.already_entered, ephemeral: true});
+      Logger.Log(`${interaction.user.tag} tried to add guild ${archDiscordRole} <> ${discordRole.name} but it was already entered`, WARNINGLEVEL.INFO);
       return;
     }
 
@@ -48,8 +50,10 @@ export default class AddGuild extends CommandInteractionHandle {
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.addGuild.success.description, [archDiscordRole, discordRole.id]),
         color: 0x00ff00,
       }));
+      Logger.Log(`${interaction.user.tag} added guild ${archDiscordRole} <> ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
       interaction.reply({content: LanguageHandler.language.commands.addGuild.error.internalError, ephemeral: true});
+      Logger.Error(`${interaction.user.tag} tried to add guild ${archDiscordRole} <> ${discordRole.name} but it failed`, err, WARNINGLEVEL.WARN);
     }
   }
 }
