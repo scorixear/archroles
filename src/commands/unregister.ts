@@ -30,7 +30,7 @@ export default class Unregister extends CommandInteractionHandle {
         await (interaction.member as GuildMember)?.roles.remove(role, "User Unregistered via Bot");
       }
     } catch (err) {
-      Logger.Error(`${interaction.user.username} tried to unregister but it failed`, err, WARNINGLEVEL.WARN);
+      Logger.Error(`${interaction.user.tag} tried to unregister but it failed`, err, WARNINGLEVEL.WARN);
     }
 
     interaction.reply(await messageHandler.getRichTextExplicitDefault({

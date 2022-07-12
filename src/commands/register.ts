@@ -38,7 +38,7 @@ export default class Register extends CommandInteractionHandle {
       }
       if(!isValid) {
         interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
-        Logger.Log(`${interaction.user.username} tried to register but was not registered.`, WARNINGLEVEL.INFO);
+        Logger.Log(`${interaction.user.tag} tried to register but was not registered.`, WARNINGLEVEL.INFO);
         return;
       }
       try {
@@ -56,7 +56,7 @@ export default class Register extends CommandInteractionHandle {
           try {
             await (interaction.member as GuildMember)?.setNickname(archUser.nickname);
           } catch(err) {
-            Logger.Error(`${interaction.user.username} tried to set nickname but it failed`, err, WARNINGLEVEL.WARN);
+            Logger.Error(`${interaction.user.tag} tried to set nickname but it failed`, err, WARNINGLEVEL.WARN);
           }
         }
         interaction.reply(await messageHandler.getRichTextExplicitDefault({
@@ -66,11 +66,11 @@ export default class Register extends CommandInteractionHandle {
           description: LanguageHandler.language.commands.register.success.description,
           color: 0x00ff00,
         }));
-        Logger.Log(`${interaction.user.username} registered.`, WARNINGLEVEL.INFO);
+        Logger.Log(`${interaction.user.tag} registered.`, WARNINGLEVEL.INFO);
       } catch (err) {
         console.log(err);
         interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
-        Logger.Error(`${interaction.user.username} registered but failed to add roles.`, err, WARNINGLEVEL.WARN);
+        Logger.Error(`${interaction.user.tag} registered but failed to add roles.`, err, WARNINGLEVEL.WARN);
       }
     } catch(error) {
       interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
