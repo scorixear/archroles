@@ -1,7 +1,7 @@
 import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
+import {CommandInteraction, GuildMember} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
@@ -30,7 +30,7 @@ export default class Unregister extends CommandInteractionHandle {
         await (interaction.member as GuildMember)?.roles.remove(role, "User Unregistered via Bot");
       }
     } catch (err) {
-      Logger.Error(`${interaction.user.tag} tried to unregister but it failed`, err, WARNINGLEVEL.WARN);
+      Logger.Error(`${interaction.user.tag} tried to unregister on guild ${interaction.guild?.name} but it failed`, err, WARNINGLEVEL.WARN);
     }
 
     interaction.reply(await messageHandler.getRichTextExplicitDefault({
@@ -40,6 +40,6 @@ export default class Unregister extends CommandInteractionHandle {
       description: LanguageHandler.language.commands.unregister.success.description,
       color: 0x00ff00,
     }));
-    Logger.Log(`${interaction.user.tag} unregistered`, WARNINGLEVEL.INFO);
+    Logger.Log(`${interaction.user.tag} unregistered on guild ${interaction.guild?.name}`, WARNINGLEVEL.INFO);
   }
 }

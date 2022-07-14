@@ -5,20 +5,30 @@ import { Routes } from 'discord-api-types/v9';
 import config from '../config';
 import Register from '../commands/register';
 import Unregister from '../commands/unregister';
-import AddGuild from '../commands/addGuild';
-import RemoveGuild from '../commands/removeGuild';
-import ShowGuild from '../commands/showGuilds';
+import LinkRole from '../commands/linkRole';
+import UnlinkRole from '../commands/unlinkRole';
+import ShowRoles from '../commands/showRoles';
 import { Logger, WARNINGLEVEL } from '../helpers/logger';
+import AddDefaultRole from '../commands/addDefaultRole';
+import RemoveDefaultRole from '../commands/removeDefaultRole';
+import SetBypassRole from '../commands/setBypassRole';
+import ShowBypassRole from '../commands/showBypassRole';
+import ShowDefaultRoles from '../commands/showDefaulRoles';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
   constructor() {
     this.commandInteractions = [
+      new AddDefaultRole(),
+      new LinkRole(),
       new Register(),
+      new RemoveDefaultRole(),
+      new SetBypassRole(),
+      new ShowBypassRole(),
+      new ShowDefaultRoles(),
+      new ShowRoles(),
+      new UnlinkRole(),
       new Unregister(),
-      new AddGuild(),
-      new RemoveGuild(),
-      new ShowGuild(),
     ];
   }
 
@@ -32,7 +42,7 @@ export default class InteractionHandler {
     const rest = new REST( {version: '9'}).setToken(process.env.DISCORD_TOKEN??"");
 
     global.discordHandler.getGuilds().forEach(async guild=> {
-      if(guild.id === config.archKDiscordId) {
+      if(guild.id !== config.archDiscordId) {
         await rest.put(Routes.applicationGuildCommands(process.env.CLIENTID??"", guild.id), {body: commands})
         Logger.Log('Successfully registered application commands for guild', WARNINGLEVEL.INFO, guild.id);
       }

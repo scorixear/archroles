@@ -38,25 +38,26 @@ export default class Register extends CommandInteractionHandle {
       }
       if(!isValid) {
         interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
-        Logger.Log(`${interaction.user.tag} tried to register but was not registered.`, WARNINGLEVEL.INFO);
+        Logger.Log(`${interaction.user.tag} tried to register on guild ${interaction.guild?.name} but was not registered.`, WARNINGLEVEL.INFO);
         return;
       }
       try {
-        for(const role of config.archKRoles) {
+        const defaultRoles = await sqlHandler.getDefaultRoles(interaction.guild?.id);
+        for(const role of defaultRoles) {
           (interaction.member as GuildMember)?.roles.add(role, "User Registered via Bot");
         }
 
-        const guildRoles = await sqlHandler.GetGuildRoles();
+        const guildRoles = await sqlHandler.getLinkesRoles(interaction.guild?.id);
         for(const guildRole of guildRoles) {
           if (archUser.roles.cache.find(r=>r.name === guildRole.archName)) {
-            await (interaction.member as GuildMember)?.roles.add(guildRole.koreaId, "User Registered via Bot");
+            await (interaction.member as GuildMember)?.roles.add(guildRole.roleid, "User Registered via Bot");
           }
         }
         if(archUser.nickname) {
           try {
             await (interaction.member as GuildMember)?.setNickname(archUser.nickname);
           } catch(err) {
-            Logger.Error(`${interaction.user.tag} tried to set nickname but it failed`, err, WARNINGLEVEL.WARN);
+            Logger.Error(`${interaction.user.tag} tried to set nickname on guild ${interaction.guild?.name} but it failed`, err, WARNINGLEVEL.WARN);
           }
         }
         interaction.reply(await messageHandler.getRichTextExplicitDefault({
@@ -70,11 +71,11 @@ export default class Register extends CommandInteractionHandle {
       } catch (err) {
         console.log(err);
         interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
-        Logger.Error(`${interaction.user.tag} registered but failed to add roles.`, err, WARNINGLEVEL.WARN);
+        Logger.Error(`${interaction.user.tag} registered on guild ${interaction.guild?.name} but failed to add roles.`, err, WARNINGLEVEL.WARN);
       }
     } catch(error) {
       interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
-      Logger.Log(`${interaction.user.username} tried to register but was not registered.`, WARNINGLEVEL.INFO);
+      Logger.Log(`${interaction.user.username} tried to register on guild ${interaction.guild?.name} but was not registered.`, WARNINGLEVEL.INFO);
     }
   }
 }

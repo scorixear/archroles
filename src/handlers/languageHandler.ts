@@ -1,6 +1,66 @@
 export default class LanguageHandler {
   public static language = {
     commands: {
+      addDefaultRole: {
+        description: "Adds a default role when users register",
+        options: {
+          discord_role: "The role to add to users when they register",
+        },
+        success: {
+          title: "Successfully added default role",
+          description: "Added default role <@&$0>",
+        },
+        error: {
+          internalError: "An internal error occured",
+        }
+      },
+      removeDefaultRole: {
+        description: "Removes a default role",
+        options: {
+          discord_role: "The role to remove",
+        },
+        success: {
+          title: "Successfully removed default role",
+          description: "Removed default role <@&$0>",
+        },
+        error: {
+          internalError: "An internal error occured",
+        }
+      },
+      setBypassRole: {
+        description: "Sets the role that bypasses the moderation system",
+        options: {
+          discord_role: "The role to set as the bypass role",
+        },
+        success: {
+          title: "Successfully set bypass role",
+          description: "Set bypass role <@&$0>",
+        },
+        error: {
+          internalError: "An internal error occured",
+        }
+      },
+      showBypassRole: {
+        description: "Shows the bypass role",
+        success: {
+          title: "Bypass role",
+          description: "The bypass role is <@&$0>",
+        },
+        error: {
+          internalError: "An internal error occured",
+          noBypassRole: "No bypass role set",
+          bypassRoleNotFound: "The bypass role was not found",
+        }
+      },
+      showDefaultRoles: {
+        description: "Shows the default roles",
+        success: {
+          title: "Default roles",
+        },
+        error: {
+          internalError: "An internal error occured",
+        }
+      },
       register: {
         description: "Registers you to the discord",
         error: {
@@ -19,10 +79,10 @@ export default class LanguageHandler {
           description: "You have been successfully unregistered from the ARCH Korea discord.",
         }
       },
-      addGuild: {
-        description: "Adds a guild to the database",
+      linkRole: {
+        description: "Links roles from ARCH to this discord",
         error: {
-          already_entered: "This guild is already entered in the database.",
+          already_entered: "This role is already linked.",
           internalError: "An internal error occured. Please try again later.",
         },
         success: {
@@ -31,11 +91,11 @@ export default class LanguageHandler {
         },
         options: {
           arch_discord_role: "The ARCH discord role name",
-          discord_role: "The ARCH Korea discord role",
+          discord_role: "The discord role",
         }
       },
-      removeGuild: {
-        description: "Removes a guild from the database",
+      unlinkRole: {
+        description: "Unlinks roles from ARCH and this discord",
         error: {
           internalError: "An internal error occured. Please try again later.",
         },
@@ -44,16 +104,16 @@ export default class LanguageHandler {
           description: "Successfully unlinked <@&$0>.",
         },
         options: {
-          discord_role: "The ARCH Korea discord role",
+          discord_role: "The discord role",
         }
       },
-      showGuild: {
-        description: "Shows all guilds in the database",
+      showRoles: {
+        description: "Shows all linked roles",
         error: {
           internalError: "An internal error occured. Please try again later.",
         },
         success: {
-          title: "ARCH Guilds <> ARCH Korea Guilds",
+          title: "ARCH Roles <> Discord Roles",
         }
       }
     },
