@@ -42,7 +42,7 @@ export default class SqlHandler {
     try {
       conn = await this.pool.getConnection();
       const tempResult = await conn.query('SELECT * FROM `defaultroles` WHERE `guildId` = ? AND `roleId` = ?', [guildId, roleId]);
-      if(!tempResult || !tempResult[0]) { 
+      if(!tempResult || !tempResult[0]) {
         await conn.query('INSERT INTO `defaultroles` (`guildId`, `roleId`) VALUES (?, ?)', [guildId, roleId]);
       }
     } catch (error) {
@@ -173,14 +173,14 @@ export default class SqlHandler {
     }
   }
 
-  public async getLinkesRoles(guildId: string | undefined) {
+  public async getLinkedRoles(guildId: string | undefined) {
     if (guildId === undefined) {
       throw new Error("GuildId is undefined");
     }
     let conn;
     try {
       conn = await this.pool.getConnection();
-      const result = await conn.query('SELECT * FROM `guildroles` WHERE `guildid` = ?', [guildId]);
+      const result = await conn.query('SELECT * FROM `linkedroles` WHERE `guildid` = ?', [guildId]);
       const returnValue: {archName: string, roleid: string}[] = [];
       if(result) {
         for(const row of result) {

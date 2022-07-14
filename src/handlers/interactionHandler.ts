@@ -7,7 +7,7 @@ import Register from '../commands/register';
 import Unregister from '../commands/unregister';
 import LinkRole from '../commands/linkRole';
 import UnlinkRole from '../commands/unlinkRole';
-import ShowRoles from '../commands/showRoles';
+import ShowRoles from '../commands/showLinkedRoles';
 import { Logger, WARNINGLEVEL } from '../helpers/logger';
 import AddDefaultRole from '../commands/addDefaultRole';
 import RemoveDefaultRole from '../commands/removeDefaultRole';
@@ -44,7 +44,7 @@ export default class InteractionHandler {
     global.discordHandler.getGuilds().forEach(async guild=> {
       if(guild.id !== config.archDiscordId) {
         await rest.put(Routes.applicationGuildCommands(process.env.CLIENTID??"", guild.id), {body: commands})
-        Logger.Log('Successfully registered application commands for guild', WARNINGLEVEL.INFO, guild.id);
+        Logger.Log('Successfully registered application commands for guild', WARNINGLEVEL.INFO, guild.name);
       }
     });
   }

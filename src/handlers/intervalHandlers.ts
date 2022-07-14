@@ -63,7 +63,7 @@ export class IntervalHandlers {
       }
     }
   }
-    
+
 
   private static async removeRoles(member: GuildMember) {
     for (const role of member.roles.cache) {

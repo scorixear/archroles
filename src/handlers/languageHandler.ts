@@ -107,7 +107,7 @@ export default class LanguageHandler {
           discord_role: "The discord role",
         }
       },
-      showRoles: {
+      showLinkedRoles: {
         description: "Shows all linked roles",
         error: {
           internalError: "An internal error occured. Please try again later.",
