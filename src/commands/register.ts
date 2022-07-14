@@ -67,7 +67,7 @@ export default class Register extends CommandInteractionHandle {
           description: LanguageHandler.language.commands.register.success.description,
           color: 0x00ff00,
         }));
-        Logger.Log(`${interaction.user.tag} registered.`, WARNINGLEVEL.INFO);
+        Logger.Log(`${interaction.user.tag} registered on guild ${interaction.guild?.name}.`, WARNINGLEVEL.INFO);
       } catch (err) {
         console.log(err);
         interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
