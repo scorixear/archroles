@@ -61,6 +61,18 @@ export default class LanguageHandler {
           internalError: "An internal error occured",
         }
       },
+      toggleRoleRemoval: {
+        description: "Toggles the role removal system",
+        success: {
+          on_title: "Successfully turned on role removal",
+          on_description: "",
+          off_title: "Successfully turned off role removal",
+          off_description: "",
+        },
+        error: {
+          internalError: "An internal error occured",
+        }
+      },
       register: {
         description: "Registers you to the discord",
         error: {

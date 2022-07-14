@@ -14,6 +14,7 @@ import RemoveDefaultRole from '../commands/removeDefaultRole';
 import SetBypassRole from '../commands/setBypassRole';
 import ShowBypassRole from '../commands/showBypassRole';
 import ShowDefaultRoles from '../commands/showDefaulRoles';
+import ToggleRoleRemoval from '../commands/toggleRoleRemoval';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
@@ -27,6 +28,7 @@ export default class InteractionHandler {
       new ShowBypassRole(),
       new ShowDefaultRoles(),
       new ShowRoles(),
+      new ToggleRoleRemoval(),
       new UnlinkRole(),
       new Unregister(),
     ];

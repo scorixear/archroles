@@ -8,9 +8,9 @@ declare const discordHandler: DiscordHandler;
 export class IntervalHandlers {
   private static archGuild?: Guild;
   public static async initInterval() {
-    // this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
+    this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
     setInterval(async () => {
-      // await this.handleUnregister();
+      await this.handleUnregister();
     }, 1000 * 60);
   }
 
@@ -18,6 +18,9 @@ export class IntervalHandlers {
     if (!this.archGuild) return;
     for (const guild of discordHandler.getGuilds()) {
       if(guild[0] !== config.archDiscordId) {
+        if (!(await sqlHandler.isRoleRemovalActive(guild[0]))) {
+          continue;
+        }
         const removedMembers = [];
         const bypassRole = await sqlHandler.getBypassRole(guild[0]);
         for (const pair of await (guild[1].members.fetch())) {

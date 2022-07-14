@@ -26,6 +26,7 @@ export default class SqlHandler {
       await conn.query('CREATE TABLE IF NOT EXISTS `linkedroles` (`archName` VARCHAR(255) NOT NULL, `roleid` VARCHAR(255) NOT NULL, `guildid` VARCHAR(255) NOT NULL, PRIMARY KEY (`archName`, `roleid`, `guildid`))');
       await conn.query('CREATE TABLE IF NOT EXISTS `defaultroles` (`guildId` VARCHAR(255) NOT NULL, `roleId` VARCHAR(255) NOT NULL, PRIMARY KEY(`guildId`, `roleId`))');
       await conn.query('CREATE TABLE IF NOT EXISTS `bypassroles`(`guildid` VARCHAR(255) NOT NULL, `roleid` VARCHAR(255) NOT NULL, PRIMARY KEY (`guildid`))');
+      await conn.query('CREATE TABLE IF NOT EXISTS `roleremoval` (`guildId` VARCHAR(255), PRIMARY KEY(`guildId`))');
     } catch (error) {
       throw error;
     } finally {
@@ -190,6 +191,46 @@ export default class SqlHandler {
       return returnValue;
     } catch (error) {
       return [];
+    } finally {
+      if (conn) await conn.end();
+    }
+  }
+
+  public async toggleRoleRemoval(guildId: string | undefined) {
+    if (guildId === undefined) {
+      throw new Error("GuildId is undefined");
+    }
+
+    let conn;
+    try {
+      conn = await this.pool.getConnection();
+      const result = await conn.query('SELECT * FROM `roleremoval` WHERE `guildid` = ?', [guildId]);
+      if(result && result[0]) {
+        await conn.query('DELETE FROM `roleremoval` WHERE `guildid` = ?', [guildId]);
+        return false;
+      } else {
+        await conn.query('INSERT INTO `roleremoval` (`guildid`) VALUES (?)', [guildId]);
+        return true;
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      if (conn) await conn.end();
+    }
+  }
+
+  public async isRoleRemovalActive(guildId: string | undefined) {
+    if (guildId === undefined) {
+      throw new Error("GuildId is undefined");
+    }
+
+    let conn;
+    try {
+      conn = await this.pool.getConnection();
+      const result = await conn.query('SELECT * FROM `roleremoval` WHERE `guildid` = ?', [guildId]);
+      return result.length > 0;
+    } catch (error) {
+      throw error;
     } finally {
       if (conn) await conn.end();
     }
