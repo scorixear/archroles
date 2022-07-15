@@ -62,7 +62,9 @@ export class IntervalHandlers {
             }
           }
         }
-        Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name}`, WARNINGLEVEL.INFO);
+        if (removedMembers.length > 0) {
+          Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name}`, WARNINGLEVEL.INFO);
+        }
       }
     }
   }
