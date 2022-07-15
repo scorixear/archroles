@@ -64,6 +64,9 @@ export class IntervalHandlers {
             }
           }
         }
+        for(const member of removedMembers) {
+          console.log(`Removed roles from ${member.user.tag}`, member.roles.cache.map(r => r.name));
+        }
         Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name} due to not having required roles.`, WARNINGLEVEL.INFO, removedMembers.map(m => m.user.tag));
         Logger.Log(`${couldNotCatchArchMembers.length} members were removed from guild ${guild[1].name} due to not being on arch discord.`, WARNINGLEVEL.INFO, couldNotCatchArchMembers.map(m => m.user.tag));
       }
