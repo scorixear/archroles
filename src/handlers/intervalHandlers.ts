@@ -24,10 +24,11 @@ export class IntervalHandlers {
         const removedMembers = [];
         const bypassRole = await sqlHandler.getBypassRole(guild[0]);
         for (const pair of await (guild[1].members.fetch())) {
-          const member = pair[1];
+          let member = pair[1];
           if (member.user.bot) continue;
           if (!member.roles.cache.has(bypassRole)) {
             let archMember: GuildMember | undefined;
+            member = await member.guild.members.fetch(member.user.id);
             if (this.archGuild.members.cache.has(member.user.id)) {
               archMember = this.archGuild.members.cache.get(member.user.id);
             } else {
@@ -69,8 +70,6 @@ export class IntervalHandlers {
 
 
   private static async removeRoles(member: GuildMember) {
-    for (const role of member.roles.cache) {
-      await member.roles.remove(role, "Bot removed roles (auto)");
-    }
+    await member.roles.set([]);
   }
 }
