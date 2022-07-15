@@ -28,5 +28,4 @@ export default class DiscordHandler {
   public async login(token: string) {
     return await this.client.login(token);
   }
-
 }

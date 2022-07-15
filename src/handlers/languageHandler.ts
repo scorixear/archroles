@@ -81,14 +81,14 @@ export default class LanguageHandler {
         },
         success: {
           title: "Successfully Registered",
-          description: "You have been successfully registered to the ARCH Korea discord.",
+          description: "You have been successfully registered to the $0 discord.",
         }
       },
       unregister: {
         description: "Unregisters you from the discord",
         success: {
           title: "Successfully Unregistered",
-          description: "You have been successfully unregistered from the ARCH Korea discord.",
+          description: "You have been successfully unregistered from the $0 discord.",
         }
       },
       linkRole: {

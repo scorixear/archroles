@@ -64,7 +64,7 @@ export default class Register extends CommandInteractionHandle {
           guild: interaction.guild??undefined,
           author: interaction.user,
           title: LanguageHandler.language.commands.register.success.title,
-          description: LanguageHandler.language.commands.register.success.description,
+          description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.register.success.description, [interaction.guild?.name??""]),
           color: 0x00ff00,
         }));
         Logger.Log(`${interaction.user.tag} registered on guild ${interaction.guild?.name}.`, WARNINGLEVEL.INFO);

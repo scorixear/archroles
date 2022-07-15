@@ -37,7 +37,7 @@ export default class Unregister extends CommandInteractionHandle {
       guild: interaction.guild??undefined,
       author: interaction.user,
       title: LanguageHandler.language.commands.unregister.success.title,
-      description: LanguageHandler.language.commands.unregister.success.description,
+      description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.unregister.success.description, [interaction.guild?.name??""]),
       color: 0x00ff00,
     }));
     Logger.Log(`${interaction.user.tag} unregistered on guild ${interaction.guild?.name}`, WARNINGLEVEL.INFO);
