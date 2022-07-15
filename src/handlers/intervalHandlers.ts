@@ -22,6 +22,7 @@ export class IntervalHandlers {
           continue;
         }
         const removedMembers = [];
+        const couldNotCatchArchMembers = [];
         const bypassRole = await sqlHandler.getBypassRole(guild[0]);
         for (const pair of await (guild[1].members.fetch())) {
           let member = pair[1];
@@ -38,7 +39,7 @@ export class IntervalHandlers {
                 if(member.roles.cache.size > 0) {
                   try {
                     await this.removeRoles(member);
-                    removedMembers.push(member);
+                    couldNotCatchArchMembers.push(member);
                   } catch {}
                 }
                 continue;
@@ -63,7 +64,8 @@ export class IntervalHandlers {
             }
           }
         }
-        Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name}.`, WARNINGLEVEL.INFO);
+        Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name} due to not having required roles.`, WARNINGLEVEL.INFO, removedMembers);
+        Logger.Log(`${couldNotCatchArchMembers.length} members were removed from guild ${guild[1].name} due to not being on arch discord.`, WARNINGLEVEL.INFO, couldNotCatchArchMembers);
       }
     }
   }
