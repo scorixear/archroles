@@ -27,9 +27,9 @@ export class IntervalHandlers {
         for (const pair of await (guild[1].members.fetch())) {
           let member = pair[1];
           if (member.user.bot) continue;
-          if (!member.roles.cache.has(bypassRole)) {
+          if (!member.roles.cache.has(bypassRole) && member.roles.cache.size > 0) {
             let archMember: GuildMember | undefined;
-            member = await member.guild.members.fetch(member.user.id);
+            member = await member.guild.members.fetch({user: member.user.id, force: true});
             if (this.archGuild.members.cache.has(member.user.id)) {
               archMember = this.archGuild.members.cache.get(member.user.id);
             } else {
@@ -64,8 +64,8 @@ export class IntervalHandlers {
             }
           }
         }
-        Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name} due to not having required roles.`, WARNINGLEVEL.INFO, removedMembers);
-        Logger.Log(`${couldNotCatchArchMembers.length} members were removed from guild ${guild[1].name} due to not being on arch discord.`, WARNINGLEVEL.INFO, couldNotCatchArchMembers);
+        Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name} due to not having required roles.`, WARNINGLEVEL.INFO, removedMembers.map(m => m.user.tag));
+        Logger.Log(`${couldNotCatchArchMembers.length} members were removed from guild ${guild[1].name} due to not being on arch discord.`, WARNINGLEVEL.INFO, couldNotCatchArchMembers.map(m => m.user.tag));
       }
     }
   }
