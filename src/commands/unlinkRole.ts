@@ -31,16 +31,18 @@ export default class UnlinkRole extends CommandInteractionHandle {
     const discordRole = interaction.options.getRole("discord_role", true);
     try {
       await sqlHandler.unlinkRole(discordRole.id, interaction.guild?.id);
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.unlinkRole.success.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.unlinkRole.success.description, [discordRole.id]),
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} unlinked role ${discordRole.name} on guild ${interaction.guild?.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.unlinkRole.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.unlinkRole.error.internal_error_title,
+        description: LanguageHandler.language.commands.unlinkRole.error.internal_error_description,
+      });
       Logger.Error(`${interaction.user.tag} tried to unlink role ${discordRole.name} on guild ${interaction.guild?.name} but it failed`, err, WARNINGLEVEL.WARN);
     }
   }

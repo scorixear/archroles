@@ -11,7 +11,8 @@ export default class LanguageHandler {
           description: "Added default role <@&$0>",
         },
         error: {
-          internalError: "An internal error occured",
+          title: "Internal Error",
+          description: "Failed to add default role <@&$0> due to an internal error",
         }
       },
       removeDefaultRole: {
@@ -24,7 +25,8 @@ export default class LanguageHandler {
           description: "Removed default role <@&$0>",
         },
         error: {
-          internalError: "An internal error occured",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to remove default role <@&$0> due to an internal error",
         }
       },
       setBypassRole: {
@@ -37,7 +39,8 @@ export default class LanguageHandler {
           description: "Set bypass role <@&$0>",
         },
         error: {
-          internalError: "An internal error occured",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to set bypass role <@&$0> due to an internal error",
         }
       },
       showBypassRole: {
@@ -47,9 +50,12 @@ export default class LanguageHandler {
           description: "The bypass role is <@&$0>",
         },
         error: {
-          internalError: "An internal error occured",
-          noBypassRole: "No bypass role set",
-          bypassRoleNotFound: "The bypass role was not found",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to show bypass role due to an internal error",
+          no_bypass_role_title: "No bypass role set",
+          no_bypass_role_description: "There is no bypass role set",
+          bypass_role_not_found_title: "Bypass role not found",
+          bypass_role_not_found_description: "The bypass role was not found",
         }
       },
       showDefaultRoles: {
@@ -58,7 +64,8 @@ export default class LanguageHandler {
           title: "Default roles",
         },
         error: {
-          internalError: "An internal error occured",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to show default roles due to an internal error",
         }
       },
       toggleRoleRemoval: {
@@ -70,14 +77,17 @@ export default class LanguageHandler {
           off_description: "",
         },
         error: {
-          internalError: "An internal error occured",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to toggle role removal due to an internal error",
         }
       },
       register: {
         description: "Registers you to the discord",
         error: {
-          internalError: "An internal error occured. Please try again later.",
-          notRegistered: "You are not registered on the ARCH discord.",
+          not_registered_title: "Not registered",
+          not_registered_description: "You are not registered to the ARCH discord",
+          internal_error_title: "Internal Error",
+          internal_error_description: "An internal error occured. Please try again later.",
         },
         success: {
           title: "Successfully Registered",
@@ -94,8 +104,10 @@ export default class LanguageHandler {
       linkRole: {
         description: "Links roles from ARCH to this discord",
         error: {
-          already_entered: "This role is already linked.",
-          internalError: "An internal error occured. Please try again later.",
+          already_entered_title: "Already entered",
+          already_entered_description: "This role is already linked.",
+          internalError_title: "Internal Error",
+          internalError_description: "An internal error occured. Please try again later.",
         },
         success: {
           title: "Successfully Linked",
@@ -109,6 +121,8 @@ export default class LanguageHandler {
       unlinkRole: {
         description: "Unlinks roles from ARCH and this discord",
         error: {
+          internal_error_title: "Internal Error",
+          internal_error_description: "An internal error occured. Please try again later.",
           internalError: "An internal error occured. Please try again later.",
         },
         success: {
@@ -122,7 +136,8 @@ export default class LanguageHandler {
       showLinkedRoles: {
         description: "Shows all linked roles",
         error: {
-          internalError: "An internal error occured. Please try again later.",
+          internal_error_title: "Internal Error",
+          internal_error_description: "Failed to show linked roles due to an internal error",
         },
         success: {
           title: "ARCH Roles <> Discord Roles",

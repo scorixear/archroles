@@ -35,16 +35,18 @@ export default class SetBypassRole extends CommandInteractionHandle {
 
     try {
       await sqlHandler.setBypassRole(interaction.guild?.id, discordRole.id);
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.setBypassRole.success.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.setBypassRole.success.description, [discordRole.id]),
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} set bypass role ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.setBypassRole.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.setBypassRole.error.internal_error_title,
+        description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.setBypassRole.error.internal_error_description, [discordRole.id]),
+      });
       Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} failed to set bypass role ${discordRole.name}`, err, WARNINGLEVEL.ERROR);
     }
   }

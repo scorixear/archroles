@@ -32,16 +32,18 @@ export default class ShowDefaultRoles extends CommandInteractionHandle {
     try {
       const defaultRoles = await sqlHandler.getDefaultRoles(interaction.guild?.id);
       const defaultRolesText = defaultRoles.map(role => `<@&${role}>`).join("\n");
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.showDefaultRoles.success.title,
         description: defaultRolesText,
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} showed default roles`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.showDefaultRoles.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.showDefaultRoles.error.internal_error_title,
+        description: LanguageHandler.language.commands.showDefaultRoles.error.internal_error_description,
+      });
       Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} failed to show default roles`, err, WARNINGLEVEL.ERROR);
     }
   }

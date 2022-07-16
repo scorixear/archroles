@@ -35,16 +35,18 @@ export default class RemoveDefaultRole extends CommandInteractionHandle {
 
     try {
       await sqlHandler.removeDefaultRole(interaction.guild?.id, discordRole.id);
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.removeDefaultRole.success.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.removeDefaultRole.success.description, [discordRole.id]),
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} removed default role ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.removeDefaultRole.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.removeDefaultRole.error.internal_error_title,
+        description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.removeDefaultRole.error.internal_error_description, [discordRole.id]),
+      });
       Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} failed to remove default role ${discordRole.name}`, err, WARNINGLEVEL.ERROR);
     }
   }

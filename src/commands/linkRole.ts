@@ -36,23 +36,29 @@ export default class LinkRole extends CommandInteractionHandle {
     const discordRole = interaction.options.getRole("discord_role", true);
 
     if(await sqlHandler.isRoleLinked(archDiscordRole, discordRole.id, interaction.guild?.id)) {
-      interaction.reply({content: LanguageHandler.language.commands.linkRole.error.already_entered, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.linkRole.error.already_entered_title,
+        description: LanguageHandler.language.commands.linkRole.error.already_entered_description,
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it was already entered`, WARNINGLEVEL.INFO);
       return;
     }
 
     try {
       await sqlHandler.linkRole(archDiscordRole, discordRole.id, interaction.guild?.id);
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.linkRole.success.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.linkRole.success.description, [archDiscordRole, discordRole.id]),
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} added role ${archDiscordRole} <> ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.linkRole.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.linkRole.error.internalError_title,
+        description: LanguageHandler.language.commands.linkRole.error.internalError_description,
+      });
       Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it failed`, err, WARNINGLEVEL.WARN);
     }
   }

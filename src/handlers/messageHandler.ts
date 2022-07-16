@@ -1,4 +1,4 @@
-import {Guild, Message, MessageActionRow, MessageEmbed, TextBasedChannel, TextChannel, User, UserResolvable} from 'discord.js';
+import {CommandInteraction, Guild, Interaction, Message, MessageActionRow, MessageEmbed, TextBasedChannel, TextChannel, User, UserResolvable} from 'discord.js';
 
 /**
  * Prints a MessageEmbed
@@ -33,6 +33,32 @@ import {Guild, Message, MessageActionRow, MessageEmbed, TextBasedChannel, TextCh
   components?: MessageActionRow[],
 }) {
   return await sendRichTextExplicit(param0.guild, param0.channel, param0.author, param0.title, param0.categories, param0.color, param0.description, param0.thumbnail, param0.url, param0.components);
+}
+
+async function replyRichErrorText(param0: {
+  interaction: CommandInteraction,
+  title?: string,
+  categories?: {title: string, text?: string, inline?: boolean}[],
+  description?: string,
+  thumbnail?: string,
+  color?: number,
+  url?: string,
+  components?: MessageActionRow[],
+}) {
+  return await param0.interaction.reply(await getRichErrorTextInteraction(param0));
+}
+
+async function replyRichText(param0: {
+  interaction: CommandInteraction,
+  title?: string,
+  categories?: {title: string, text?: string, inline?: boolean}[],
+  description?: string,
+  thumbnail?: string,
+  color?: number,
+  url?: string,
+  components?: MessageActionRow[],
+}) {
+  return await param0.interaction.reply(await getRichTextInteraction(param0));
 }
 
 /**
@@ -86,6 +112,53 @@ import {Guild, Message, MessageActionRow, MessageEmbed, TextBasedChannel, TextCh
   return channel.send({embeds: [richText]});
 }
 
+async function getRichTextInteraction(param0: {
+  interaction: Interaction,
+  title?: string,
+  categories?: {title: string, text?: string, inline?: boolean}[],
+  description?: string,
+  thumbnail?: string,
+  color?: number,
+  url?: string,
+  components?: MessageActionRow[],
+}) {
+  return getRichTextExplicitDefault({
+    guild: param0.interaction.guild??undefined,
+    author: param0.interaction.user,
+    title: param0.title,
+    categories: param0.categories,
+    color: param0.color??0x00FF00,
+    description: param0.description,
+    thumbnail: param0.thumbnail,
+    url: param0.url,
+    components: param0.components
+  });
+}
+
+async function getRichErrorTextInteraction(param0: {
+  interaction: Interaction,
+  title?: string,
+  categories?: {title: string, text?: string, inline?: boolean}[],
+  description?: string,
+  thumbnail?: string,
+  color?: number,
+  url?: string,
+  components?: MessageActionRow[],
+}) {
+  return getRichTextExplicitDefault({
+    guild: param0.interaction.guild??undefined,
+    author: param0.interaction.user,
+    title: param0.title,
+    categories: param0.categories,
+    color: param0.color??0xFF0000,
+    description: param0.description,
+    thumbnail: param0.thumbnail,
+    url: param0.url,
+    components: param0.components,
+    ephemeral: true
+  });
+}
+
 /**
  * Returns a Message Embed
  */
@@ -99,11 +172,12 @@ async function getRichTextExplicitDefault(param0: {
   thumbnail?: string,
   url?: string,
   components?: MessageActionRow[],
+  ephemeral?: boolean,
 }) {
-  return getRichTextExplicit(param0.guild, param0.author, param0.title, param0.categories, param0.color, param0.description, param0.thumbnail, param0.url, param0.components);
+  return getRichTextExplicit(param0.guild, param0.author, param0.title, param0.categories, param0.color, param0.description, param0.thumbnail, param0.url, param0.components, param0.ephemeral);
 }
 
-async function getRichTextExplicit(guild?: Guild, author?: User, title?: string, categories?: {title: string, text?: string, inline?: boolean}[], color?: number, description?: string, thumbnail?: string, url?: string, components?: MessageActionRow[]) {
+async function getRichTextExplicit(guild?: Guild, author?: User, title?: string, categories?: {title: string, text?: string, inline?: boolean}[], color?: number, description?: string, thumbnail?: string, url?: string, components?: MessageActionRow[], ephemeral?: boolean) {
   const richText: MessageEmbed = new MessageEmbed();
   if (title) {
     richText.setTitle(title);
@@ -133,11 +207,12 @@ async function getRichTextExplicit(guild?: Guild, author?: User, title?: string,
   if (url) {
     richText.setURL(url.toString());
   }
+  const eph = ephemeral || false;
 
-  let returnValue: {embeds: MessageEmbed[], components?: MessageActionRow[]} = {embeds: [richText]};
+  let returnValue: {embeds: MessageEmbed[], ephemeral: boolean, components?: MessageActionRow[]} = {embeds: [richText], ephemeral: eph};
 
   if (components) {
-    returnValue = {embeds: [richText], components};
+    returnValue = {embeds: [richText], ephemeral: eph, components};
   }
   return returnValue;
 }
@@ -162,6 +237,10 @@ export default {
   sendRichTextExplicit,
   sendRichTextDefault,
   sendRichTextDefaultExplicit,
+  replyRichErrorText,
+  replyRichText,
+  getRichTextInteraction,
+  getRichErrorTextInteraction,
   getRichTextExplicit,
   getRichTextExplicitDefault
 };

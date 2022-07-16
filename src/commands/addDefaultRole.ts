@@ -34,16 +34,18 @@ export default class AddDefaultRole extends CommandInteractionHandle {
     const discordRole = interaction.options.getRole("discord_role", true);
     try {
       await sqlHandler.addDefaultRole(interaction.guild?.id, discordRole.id);
-      interaction.reply(await messageHandler.getRichTextExplicitDefault({
-        guild: interaction.guild??undefined,
-        author: interaction.user,
+      await messageHandler.replyRichText({
+        interaction,
         title: LanguageHandler.language.commands.addDefaultRole.success.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.addDefaultRole.success.description, [discordRole.id]),
-        color: 0x00ff00,
-      }));
+      });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} added default role ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      interaction.reply({content: LanguageHandler.language.commands.addDefaultRole.error.internalError, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.addDefaultRole.error.title,
+        description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.addDefaultRole.error.description, [discordRole.id]),
+      });
       Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} failed to add default role ${discordRole.name}`, err, WARNINGLEVEL.ERROR);
     }
   }

@@ -32,14 +32,11 @@ export default class Unregister extends CommandInteractionHandle {
     } catch (err) {
       Logger.Error(`${interaction.user.tag} tried to unregister on guild ${interaction.guild?.name} but it failed`, err, WARNINGLEVEL.WARN);
     }
-
-    interaction.reply(await messageHandler.getRichTextExplicitDefault({
-      guild: interaction.guild??undefined,
-      author: interaction.user,
+    messageHandler.replyRichText({
+      interaction,
       title: LanguageHandler.language.commands.unregister.success.title,
       description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.unregister.success.description, [interaction.guild?.name??""]),
-      color: 0x00ff00,
-    }));
+    });
     Logger.Log(`${interaction.user.tag} unregistered on guild ${interaction.guild?.name}`, WARNINGLEVEL.INFO);
   }
 }

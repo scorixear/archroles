@@ -37,7 +37,11 @@ export default class Register extends CommandInteractionHandle {
         }
       }
       if(!isValid) {
-        interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
+        messageHandler.replyRichErrorText({
+          interaction,
+          title: LanguageHandler.language.commands.register.error.not_registered_title,
+          description: LanguageHandler.language.commands.register.error.not_registered_description,
+        });
         Logger.Log(`${interaction.user.tag} tried to register on guild ${interaction.guild?.name} but was not registered.`, WARNINGLEVEL.INFO);
         return;
       }
@@ -60,21 +64,26 @@ export default class Register extends CommandInteractionHandle {
             Logger.Error(`${interaction.user.tag} tried to set nickname on guild ${interaction.guild?.name} but it failed`, err, WARNINGLEVEL.WARN);
           }
         }
-        interaction.reply(await messageHandler.getRichTextExplicitDefault({
-          guild: interaction.guild??undefined,
-          author: interaction.user,
+        messageHandler.replyRichText({
+          interaction,
           title: LanguageHandler.language.commands.register.success.title,
           description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.register.success.description, [interaction.guild?.name??""]),
-          color: 0x00ff00,
-        }));
+        });
         Logger.Log(`${interaction.user.tag} registered on guild ${interaction.guild?.name}.`, WARNINGLEVEL.INFO);
       } catch (err) {
-        console.log(err);
-        interaction.reply({content: LanguageHandler.language.commands.register.error.internalError, ephemeral: true});
+        messageHandler.replyRichErrorText({
+          interaction,
+          title: LanguageHandler.language.commands.register.error.internal_error_title,
+          description: LanguageHandler.language.commands.register.error.internal_error_description,
+        });
         Logger.Error(`${interaction.user.tag} registered on guild ${interaction.guild?.name} but failed to add roles.`, err, WARNINGLEVEL.WARN);
       }
     } catch(error) {
-      interaction.reply({content: LanguageHandler.language.commands.register.error.notRegistered, ephemeral: true});
+      messageHandler.replyRichErrorText({
+        interaction,
+        title: LanguageHandler.language.commands.register.error.not_registered_title,
+        description: LanguageHandler.language.commands.register.error.not_registered_description,
+      });
       Logger.Log(`${interaction.user.username} tried to register on guild ${interaction.guild?.name} but was not registered.`, WARNINGLEVEL.INFO);
     }
   }
