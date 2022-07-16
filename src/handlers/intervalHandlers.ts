@@ -11,7 +11,7 @@ export class IntervalHandlers {
     this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
     setInterval(async () => {
       await this.handleUnregister();
-    }, 1000 * 60);
+    }, 1000 * 60 * 5);
   }
 
   private static async handleUnregister() {
