@@ -24,7 +24,7 @@ export class IntervalHandlers {
         const removedMembers = [];
         const bypassRole = await sqlHandler.getBypassRole(guild[0]);
         for (const pair of await (guild[1].members.fetch())) {
-          let member = pair[1];
+          const member = pair[1];
           if (member.user.bot) continue;
           if (!member.roles.cache.has(bypassRole) && member.roles.cache.size > 0 && member.roles.cache.at(0)?.name !== "@everyone") {
             let archMember: GuildMember | undefined;
