@@ -11,7 +11,7 @@ export class IntervalHandlers {
     this.archGuild = await discordHandler.fetchGuild(config.archDiscordId)
     setInterval(async () => {
       await this.handleUnregister();
-    }, 1000 * 60 * 5);
+    }, 1000 * 60 * 60);
   }
 
   private static async handleUnregister() {
@@ -23,14 +23,13 @@ export class IntervalHandlers {
         }
         const removedMembers = [];
         const bypassRole = await sqlHandler.getBypassRole(guild[0]);
-        for (const pair of await (guild[1].members.fetch())) {
-          const member = pair[1];
-          if (member.user.bot) continue;
-          if (!member.roles.cache.has(bypassRole) && member.roles.cache.size > 0 && member.roles.cache.at(0)?.name !== "@everyone") {
-            let archMember: GuildMember | undefined;
-            if (this.archGuild.members.cache.has(member.user.id)) {
-              archMember = this.archGuild.members.cache.get(member.user.id);
-            } else {
+        try {
+          const guildMembers = await guild[1].members.fetch();
+          for (const pair of guildMembers) {
+            const member = pair[1];
+            if (member.user.bot) continue;
+            if (!member.roles.cache.has(bypassRole) && member.roles.cache.size > 0 && member.roles.cache.at(0)?.name !== "@everyone") {
+              let archMember: GuildMember | undefined;
               try {
                 archMember = await this.archGuild.members.fetch(member.user.id);
               } catch {
@@ -42,26 +41,31 @@ export class IntervalHandlers {
                 }
                 continue;
               }
-            }
-            let isValid = true;
-            for (const roles of config.archRequiredRoles) {
-              const foundRole = roles.find(r => archMember?.roles.cache.has(r));
-              if (!foundRole) {
-                isValid = false;
-                break;
+              
+              let isValid = true;
+              for (const roles of config.archRequiredRoles) {
+                const foundRole = roles.find(r => archMember?.roles.cache.has(r));
+                if (!foundRole) {
+                  isValid = false;
+                  break;
+                }
               }
-            }
-            if (!isValid) {
-              if(member.roles.cache.size > 0 && member.roles.cache.at(0)?.name !== "@everyone") {
-                try {
-                  await this.removeRoles(member);
-                  removedMembers.push(member);
-                } catch {}
+              if (!isValid) {
+                if(member.roles.cache.size > 0 && member.roles.cache.at(0)?.name !== "@everyone") {
+                  try {
+                    await this.removeRoles(member);
+                    removedMembers.push(member);
+                  } catch {}
+                }
+                continue;
               }
-              continue;
             }
           }
+        } catch {
+          Logger.Log(`Failed to fetch members for guild ${guild[1].name}, skipping role removal`, WARNINGLEVEL.WARN);
+          continue;
         }
+        
         if (removedMembers.length > 0) {
           Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name}`, WARNINGLEVEL.INFO);
         }
