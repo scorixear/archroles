@@ -41,7 +41,7 @@ export class IntervalHandlers {
                 }
                 continue;
               }
-              
+
               let isValid = true;
               for (const roles of config.archRequiredRoles) {
                 const foundRole = roles.find(r => archMember?.roles.cache.has(r));
@@ -65,7 +65,7 @@ export class IntervalHandlers {
           Logger.Log(`Failed to fetch members for guild ${guild[1].name}, skipping role removal`, WARNINGLEVEL.WARN);
           continue;
         }
-        
+
         if (removedMembers.length > 0) {
           Logger.Log(`${removedMembers.length} members were removed from guild ${guild[1].name}`, WARNINGLEVEL.INFO);
         }

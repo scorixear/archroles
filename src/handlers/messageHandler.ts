@@ -58,7 +58,12 @@ async function replyRichText(param0: {
   url?: string,
   components?: MessageActionRow[],
 }) {
-  return await param0.interaction.reply(await getRichTextInteraction(param0));
+  try {
+    return await param0.interaction.reply(await getRichTextInteraction(param0));
+  } catch (err) {
+    await param0.interaction.channel?.send(`<@${param0.interaction.user.id}>`);
+    return await param0.interaction.channel?.send(await getRichTextInteraction(param0));
+  }
 }
 
 /**
