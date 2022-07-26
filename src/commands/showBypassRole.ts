@@ -28,7 +28,6 @@ export default class ShowBypassRole extends CommandInteractionHandle {
     } catch(err) {
       return;
     }
-
     try {
       const bypassRole = await sqlHandler.getBypassRole(interaction.guild?.id);
       if(!bypassRole) {

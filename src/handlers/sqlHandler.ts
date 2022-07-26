@@ -1,6 +1,5 @@
 import mariadb from 'mariadb';
 import { Logger, WARNINGLEVEL } from '../helpers/logger';
-import config from '../config';
 
 export default class SqlHandler {
   private pool: mariadb.Pool;

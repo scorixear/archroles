@@ -45,8 +45,13 @@ async function replyRichErrorText(param0: {
   url?: string,
   components?: MessageActionRow[],
 }) {
-  return await param0.interaction.reply(await getRichErrorTextInteraction(param0));
+  if(param0.interaction.deferred) {
+    return await param0.interaction.editReply(await getRichErrorTextInteraction(param0));
+  } else {
+    return await param0.interaction.reply(await getRichErrorTextInteraction(param0));
+  }
 }
+
 
 async function replyRichText(param0: {
   interaction: CommandInteraction,
@@ -58,11 +63,10 @@ async function replyRichText(param0: {
   url?: string,
   components?: MessageActionRow[],
 }) {
-  try {
+  if(param0.interaction.deferred) {
+    return await param0.interaction.editReply(await getRichTextInteraction(param0));
+  } else {
     return await param0.interaction.reply(await getRichTextInteraction(param0));
-  } catch (err) {
-    await param0.interaction.channel?.send(`<@${param0.interaction.user.id}>`);
-    return await param0.interaction.channel?.send(await getRichTextInteraction(param0));
   }
 }
 

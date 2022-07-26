@@ -42,6 +42,11 @@ abstract class CommandInteractionHandle {
   }
 
   public async handle(interaction: CommandInteraction) {
+    setTimeout(()=>{
+      if(!interaction.replied) {
+        interaction.deferReply();
+      }
+    },2000)
     if(this.requirePermissions) {
       const guild = interaction.guild;
       if (guild) {
