@@ -1,9 +1,8 @@
-import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
+import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction, Guild, GuildMember, Role} from "discord.js";
+import {ChatInputCommandInteraction, SlashCommandRoleOption} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
-import { SlashCommandRoleOption, SlashCommandStringOption } from "@discordjs/builders";
 import SqlHandler from "../handlers/sqlHandler";
 import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
@@ -24,7 +23,7 @@ export default class AddDefaultRole extends CommandInteractionHandle {
     );
   }
 
-  override async handle(interaction: CommandInteraction) {
+  override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
     } catch(err) {
@@ -41,7 +40,7 @@ export default class AddDefaultRole extends CommandInteractionHandle {
       });
       Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} added default role ${discordRole.name}`, WARNINGLEVEL.INFO);
     } catch(err) {
-      messageHandler.replyRichErrorText({
+      await messageHandler.replyRichErrorText({
         interaction,
         title: LanguageHandler.language.commands.addDefaultRole.error.title,
         description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.addDefaultRole.error.description, [discordRole.id]),

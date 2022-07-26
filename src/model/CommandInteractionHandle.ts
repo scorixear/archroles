@@ -1,8 +1,6 @@
-import { SlashCommandIntegerOption, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, SlashCommandUserOption, SlashCommandRoleOption } from "@discordjs/builders";
-import { CommandInteraction, GuildMember, GuildMemberRoleManager, Role } from "discord.js";
-import config from '../config';
+import { ChatInputCommandInteraction, CommandInteraction, GuildMember, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandIntegerOption, SlashCommandRoleOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js";
 
-abstract class CommandInteractionHandle {
+export default abstract class CommandInteractionHandle {
   public command: string;
   public description: ()=>string;
   public example: string;
@@ -36,33 +34,28 @@ abstract class CommandInteractionHandle {
       } else if (option instanceof SlashCommandRoleOption) {
         this.slashCommandBuilder.addRoleOption(option);
       } else {
-        throw new Error("Not supported SlashCommand Option");
+        throw new Error("Not supported SlashCommand Option" + option.constructor.name);
       }
     }
   }
 
-  public async handle(interaction: CommandInteraction) {
+  public async handle(interaction: ChatInputCommandInteraction) {
     setTimeout(()=>{
       if(!interaction.replied) {
         interaction.deferReply();
       }
-    },2000)
+    },2000);
     if(this.requirePermissions) {
-      const guild = interaction.guild;
-      if (guild) {
-        const applicationCommand = (await guild.commands.fetch()).find(command => command.name === this.command);
+      const applicationCommand = (await interaction.guild?.commands.fetch())?.find(command => command.name === this.command);
 
-        if(applicationCommand) {
-          const member = await (interaction.member as GuildMember).fetch();
-          if(member.user.id === process.env.OWNER_ID) {
-            return;
-          }
+      if(applicationCommand) {
+        const member = await (interaction.member as GuildMember).fetch();
+        if(member.user.id === process.env.OWNER_ID) {
           return;
-          throw Error('No permission');
         }
+        return;
+        throw Error('No permission');
       }
     }
   }
 }
-
-export {CommandInteractionHandle};

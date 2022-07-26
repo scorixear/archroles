@@ -1,7 +1,7 @@
-import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
+import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction} from "discord.js";
+import {ChatInputCommandInteraction} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import { SlashCommandRoleOption } from "@discordjs/builders";
 import { Logger, WARNINGLEVEL } from "../helpers/logger";
@@ -21,7 +21,7 @@ export default class UnlinkRole extends CommandInteractionHandle {
     );
   }
 
-  override async handle(interaction: CommandInteraction) {
+  override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
     } catch(err) {

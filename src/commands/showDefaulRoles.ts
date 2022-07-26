@@ -1,7 +1,7 @@
-import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
+import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction} from "discord.js";
+import {ChatInputCommandInteraction, CommandInteraction} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import SqlHandler from "../handlers/sqlHandler";
 import { Logger, WARNINGLEVEL } from "../helpers/logger";
@@ -22,7 +22,7 @@ export default class ShowDefaultRoles extends CommandInteractionHandle {
     );
   }
 
-  override async handle(interaction: CommandInteraction) {
+  override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
     } catch(err) {

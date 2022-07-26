@@ -1,7 +1,7 @@
-import { CommandInteractionHandle } from "../model/CommandInteractionHandle";
+import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
 import LanguageHandler from "../handlers/languageHandler";
-import {CommandInteraction, GuildMember} from "discord.js";
+import {ChatInputCommandInteraction, CommandInteraction, GuildMember} from "discord.js";
 import messageHandler from "../handlers/messageHandler";
 import { Logger, WARNINGLEVEL } from "../helpers/logger";
 
@@ -19,7 +19,7 @@ export default class Unregister extends CommandInteractionHandle {
     );
   }
 
-  override async handle(interaction: CommandInteraction) {
+  override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
     } catch(err) {

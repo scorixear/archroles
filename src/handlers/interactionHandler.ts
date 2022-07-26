@@ -1,7 +1,6 @@
-import { ApplicationCommandPermissionData, ButtonInteraction, CommandInteraction, Interaction, SelectMenuInteraction } from 'discord.js';
-import { CommandInteractionHandle } from '../model/CommandInteractionHandle';
+import { ChatInputCommandInteraction, Interaction } from 'discord.js';
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
+import { Routes } from 'discord-api-types/v10';
 import config from '../config';
 import Register from '../commands/register';
 import Unregister from '../commands/unregister';
@@ -15,6 +14,7 @@ import SetBypassRole from '../commands/setBypassRole';
 import ShowBypassRole from '../commands/showBypassRole';
 import ShowDefaultRoles from '../commands/showDefaulRoles';
 import ToggleRoleRemoval from '../commands/toggleRoleRemoval';
+import CommandInteractionHandle from '../model/CommandInteractionHandle';
 
 export default class InteractionHandler {
   private commandInteractions: CommandInteractionHandle[];
@@ -53,8 +53,8 @@ export default class InteractionHandler {
 
   public async handle(interaction: Interaction) {
     try {
-      if (interaction.isCommand()) {
-        const commandInteraction: CommandInteraction = interaction as CommandInteraction;
+      if (interaction.isChatInputCommand()) {
+        const commandInteraction: ChatInputCommandInteraction = interaction as ChatInputCommandInteraction;
         const handler = this.commandInteractions.find(interactionHandle => interactionHandle.command === commandInteraction.commandName);
         if (handler) {
           await handler.handle(commandInteraction);
@@ -63,8 +63,9 @@ export default class InteractionHandler {
         return;
       }
     } catch (err) {
-      Logger.Error(`Error handling interaction ${interaction.id}`, err, WARNINGLEVEL.ERROR);
+      Logger.Error("Error while handling interaction", err, WARNINGLEVEL.ERROR);
     }
+
 
   }
 }
