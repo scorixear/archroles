@@ -107,7 +107,7 @@ async function sendRichTextExplicit(guild: Guild | undefined, channel: TextBased
 
   if (guild && author) {
     const guildMember = await guild.members.fetch(author);
-    richText.setFooter({text: guildMember.nickname?guildMember.nickname.toString():guildMember.user.username.toString(), iconURL: author.avatarURL()??undefined});
+    richText.setFooter({text: guildMember.displayName, iconURL: author.displayAvatarURL()});
   }
 
   richText.setTimestamp(new Date());
@@ -212,7 +212,7 @@ async function getRichTextExplicit(guild?: Guild, author?: User, title?: string,
 
   if (guild && author) {
     const guildMember = await guild.members.fetch(author);
-    richText.setFooter({text: guildMember.nickname?guildMember.nickname.toString():guildMember.user.username.toString()??"", iconURL: author.avatarURL()??""});
+    richText.setFooter({text: guildMember.displayName, iconURL: author.displayAvatarURL()});
   }
 
   richText.setTimestamp(new Date());
