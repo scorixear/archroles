@@ -1,58 +1,59 @@
-import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
-import LanguageHandler from "../handlers/languageHandler";
-import {ChatInputCommandInteraction, CommandInteraction} from "discord.js";
-import messageHandler from "../handlers/messageHandler";
-import SqlHandler from "../handlers/sqlHandler";
-import { Logger, WARNINGLEVEL } from "../helpers/logger";
+import LanguageHandler from '../handlers/languageHandler';
+import { ChatInputCommandInteraction } from 'discord.js';
+import SqlHandler from '../handlers/sqlHandler';
+import { CommandInteractionModel, Logger, MessageHandler, WARNINGLEVEL } from 'discord.ts-architecture';
 
-declare const sqlHandler: SqlHandler
+declare const sqlHandler: SqlHandler;
 
-export default class ToggleRoleRemoval extends CommandInteractionHandle {
+export default class ToggleRoleRemoval extends CommandInteractionModel {
   constructor() {
     const commandOptions: any[] = [];
     super(
-      "toggleroleremoval",
-      () => LanguageHandler.replaceArgs(LanguageHandler.language.commands.toggleRoleRemoval.description, [config.botPrefix]),
-      "toggleroleremoval",
-      "Moderation",
-      "toggleroleremoval",
-      commandOptions,
-      true,
+      'toggleroleremoval',
+      LanguageHandler.replaceArgs(LanguageHandler.language.commands.toggleRoleRemoval.description, [config.botPrefix]),
+      'toggleroleremoval',
+      'Moderation',
+      'toggleroleremoval',
+      commandOptions
     );
   }
 
   override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
-    } catch(err) {
+    } catch (err) {
       return;
     }
 
     try {
       const toggle = await sqlHandler.toggleRoleRemoval(interaction.guild?.id);
       if (toggle) {
-        messageHandler.replyRichText({
+        MessageHandler.reply({
           interaction,
           title: LanguageHandler.language.commands.toggleRoleRemoval.success.on_title,
-          description: LanguageHandler.language.commands.toggleRoleRemoval.success.on_description,
+          description: LanguageHandler.language.commands.toggleRoleRemoval.success.on_description
         });
-        Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} turned on role removal`, WARNINGLEVEL.INFO);
+        Logger.info(`${interaction.user.tag} on guild ${interaction.guild?.name} turned on role removal`);
       } else {
-        messageHandler.replyRichText({
+        MessageHandler.reply({
           interaction,
           title: LanguageHandler.language.commands.toggleRoleRemoval.success.off_title,
           description: LanguageHandler.language.commands.toggleRoleRemoval.success.off_description,
-          color: 0xff0000,
+          color: 0xff0000
         });
       }
-    } catch(err) {
-      messageHandler.replyRichErrorText({
+    } catch (err) {
+      MessageHandler.replyError({
         interaction,
         title: LanguageHandler.language.commands.toggleRoleRemoval.error.internal_error_title,
-        description: LanguageHandler.language.commands.toggleRoleRemoval.error.internal_error_description,
+        description: LanguageHandler.language.commands.toggleRoleRemoval.error.internal_error_description
       });
-      Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} failed to toggle role removal`, err, WARNINGLEVEL.ERROR);
+      Logger.exception(
+        `${interaction.user.tag} on guild ${interaction.guild?.name} failed to toggle role removal`,
+        err,
+        WARNINGLEVEL.ERROR
+      );
     }
   }
 }

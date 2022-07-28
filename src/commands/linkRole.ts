@@ -1,64 +1,82 @@
-import CommandInteractionHandle from "../model/CommandInteractionHandle";
 import config from '../config';
-import LanguageHandler from "../handlers/languageHandler";
-import {ChatInputCommandInteraction, SlashCommandRoleOption, SlashCommandStringOption} from "discord.js";
-import messageHandler from "../handlers/messageHandler";
-import SqlHandler from "../handlers/sqlHandler";
-import { Logger, WARNINGLEVEL } from "../helpers/logger";
+import LanguageHandler from '../handlers/languageHandler';
+import { ChatInputCommandInteraction, SlashCommandRoleOption, SlashCommandStringOption } from 'discord.js';
+import SqlHandler from '../handlers/sqlHandler';
+import { CommandInteractionModel, Logger, MessageHandler, WARNINGLEVEL } from 'discord.ts-architecture';
 
-declare const sqlHandler: SqlHandler
+declare const sqlHandler: SqlHandler;
 
-export default class LinkRole extends CommandInteractionHandle {
+export default class LinkRole extends CommandInteractionModel {
   constructor() {
     const commandOptions: any[] = [];
-    commandOptions.push(new SlashCommandStringOption().setName("arch_discord_role").setDescription(LanguageHandler.language.commands.linkRole.options.arch_discord_role).setRequired(true));
-    commandOptions.push(new SlashCommandRoleOption().setName("discord_role").setDescription(LanguageHandler.language.commands.linkRole.options.discord_role).setRequired(true));
+    commandOptions.push(
+      new SlashCommandStringOption()
+        .setName('arch_discord_role')
+        .setDescription(LanguageHandler.language.commands.linkRole.options.arch_discord_role)
+        .setRequired(true)
+    );
+    commandOptions.push(
+      new SlashCommandRoleOption()
+        .setName('discord_role')
+        .setDescription(LanguageHandler.language.commands.linkRole.options.discord_role)
+        .setRequired(true)
+    );
     super(
-      "linkrole",
-      () => LanguageHandler.replaceArgs(LanguageHandler.language.commands.linkRole.description, [config.botPrefix]),
-      "linkrole <arch_discord_role> <discord_role>",
-      "Moderation",
-      "linkrole N1ghtmare @N1ghtmare",
-      commandOptions,
-      true,
+      'linkrole',
+      LanguageHandler.replaceArgs(LanguageHandler.language.commands.linkRole.description, [config.botPrefix]),
+      'linkrole <arch_discord_role> <discord_role>',
+      'Moderation',
+      'linkrole N1ghtmare @N1ghtmare',
+      commandOptions
     );
   }
 
   override async handle(interaction: ChatInputCommandInteraction) {
     try {
       await super.handle(interaction);
-    } catch(err) {
+    } catch (err) {
       return;
     }
 
-    const archDiscordRole = interaction.options.getString("arch_discord_role", true);
-    const discordRole = interaction.options.getRole("discord_role", true);
+    const archDiscordRole = interaction.options.getString('arch_discord_role', true);
+    const discordRole = interaction.options.getRole('discord_role', true);
 
-    if(await sqlHandler.isRoleLinked(archDiscordRole, discordRole.id, interaction.guild?.id)) {
-      messageHandler.replyRichErrorText({
+    if (await sqlHandler.isRoleLinked(archDiscordRole, discordRole.id, interaction.guild?.id)) {
+      MessageHandler.replyError({
         interaction,
         title: LanguageHandler.language.commands.linkRole.error.already_entered_title,
-        description: LanguageHandler.language.commands.linkRole.error.already_entered_description,
+        description: LanguageHandler.language.commands.linkRole.error.already_entered_description
       });
-      Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it was already entered`, WARNINGLEVEL.INFO);
+      Logger.info(
+        `${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it was already entered`
+      );
       return;
     }
 
     try {
       await sqlHandler.linkRole(archDiscordRole, discordRole.id, interaction.guild?.id);
-      messageHandler.replyRichText({
+      MessageHandler.reply({
         interaction,
         title: LanguageHandler.language.commands.linkRole.success.title,
-        description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.linkRole.success.description, [archDiscordRole, discordRole.id]),
+        description: LanguageHandler.replaceArgs(LanguageHandler.language.commands.linkRole.success.description, [
+          archDiscordRole,
+          discordRole.id
+        ])
       });
-      Logger.Log(`${interaction.user.tag} on guild ${interaction.guild?.name} added role ${archDiscordRole} <> ${discordRole.name}`, WARNINGLEVEL.INFO);
-    } catch(err) {
-      messageHandler.replyRichErrorText({
+      Logger.info(
+        `${interaction.user.tag} on guild ${interaction.guild?.name} added role ${archDiscordRole} <> ${discordRole.name}`
+      );
+    } catch (err) {
+      MessageHandler.replyError({
         interaction,
         title: LanguageHandler.language.commands.linkRole.error.internalError_title,
-        description: LanguageHandler.language.commands.linkRole.error.internalError_description,
+        description: LanguageHandler.language.commands.linkRole.error.internalError_description
       });
-      Logger.Error(`${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it failed`, err, WARNINGLEVEL.WARN);
+      Logger.exception(
+        `${interaction.user.tag} on guild ${interaction.guild?.name} tried to add role ${archDiscordRole} <> ${discordRole.name} but it failed`,
+        err,
+        WARNINGLEVEL.WARN
+      );
     }
   }
 }
