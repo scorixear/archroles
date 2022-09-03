@@ -50,5 +50,5 @@ You can turn of role removal for this server with `/toggleroleremoval`. This wil
 | `/linkrole` | `/linkrole <main-server-role> <role>` | `/linkrole Guild1 @Guild1` | Links a role on the main server to a role on this server. Users with this role on the main server will get the linked role on this server. |
 | `/showlinkedroles` | `/showlinkedroles` | `/showlinkedroles` | Shows all linked roles. |
 | `/unlinkrole` | `/unlinkrole <role>` | `/unlinkrole @Guild1` | Removes a configuration of linked roles. |
-| `/register` | `/register` | `/register`` | Registers the executing user. If this user is authenticated on the main server, he will get the default roles and linked roles if applicable. |
+| `/register` | `/register` | `/register` | Registers the executing user. If this user is authenticated on the main server, he will get the default roles and linked roles if applicable. |
 | `/unregister` | `/unregister` | `/unregister` | Removes all roles from the user. Does also remove Bypass Roles. |
