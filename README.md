@@ -3,7 +3,7 @@
 The Arch Roles Bot provides **role synchronisation** between multiple servers.
 A main server provides some means for authentication of users and is the base to expand this authentication to other discord servers.
 
-## Inital Setup
+## Initial Setup
 The Bot needs to be invited to the main server. There is no role or integration to setup when inviting.
 
 This bot is then invited to other servers that want to share the same authentication as the main server does.
