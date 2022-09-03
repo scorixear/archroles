@@ -9,7 +9,7 @@ import Register from './commands/register';
 import RemoveDefaultRole from './commands/removeDefaultRole';
 import SetBypassRole from './commands/setBypassRole';
 import ShowBypassRole from './commands/showBypassRole';
-import ShowDefaultRoles from './commands/showDefaulRoles';
+import ShowDefaultRoles from './commands/showDefaultRoles';
 import ToggleRoleRemoval from './commands/toggleRoleRemoval';
 import Unregister from './commands/unregister';
 import UnlinkRole from './commands/unlinkRole';
@@ -68,12 +68,9 @@ process.on('unhandledRejection', (reason) => {
 
 sqlHandler.initDB().then(async () => {
   await discordHandler.login(process.env.DISCORD_TOKEN ?? '');
-  await interactionHandler.init(
-    process.env.DISCORD_TOKEN ?? '',
-    process.env.CLIENTID ?? '',
-    discordHandler,
-    config.archOtherDiscords
-  );
+  await interactionHandler.init(process.env.DISCORD_TOKEN ?? '', process.env.CLIENTID ?? '', discordHandler, null, [
+    config.archDiscordId
+  ]);
   Logger.info('Bot is ready');
   IntervalHandlers.initInterval();
 });
