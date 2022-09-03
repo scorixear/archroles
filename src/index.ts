@@ -68,9 +68,13 @@ process.on('unhandledRejection', (reason) => {
 
 sqlHandler.initDB().then(async () => {
   await discordHandler.login(process.env.DISCORD_TOKEN ?? '');
-  await interactionHandler.init(process.env.DISCORD_TOKEN ?? '', process.env.CLIENTID ?? '', discordHandler, null, [
-    config.archDiscordId
-  ]);
+  await interactionHandler.init(
+    process.env.DISCORD_TOKEN ?? '',
+    process.env.CLIENTID ?? '',
+    discordHandler,
+    undefined,
+    [config.archDiscordId]
+  );
   Logger.info('Bot is ready');
   IntervalHandlers.initInterval();
 });
